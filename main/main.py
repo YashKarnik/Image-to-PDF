@@ -1,9 +1,7 @@
 import glob
 import os
-import time
+from datetime import datetime
 from time import sleep
-
-from docx.api import Document
 try:
     import docx
 except ModuleNotFoundError:
@@ -12,10 +10,16 @@ except ModuleNotFoundError:
     if(ip == "y" or ip == "Y"):
         os.system("pip install python-docx")
     else:
+        print("Goodbye")
+        sleep(1)
         exit()
 
 
-def getResultantFilename(s="New File", ext="docx"):
+def getDeafultFilename():
+    return "New Doc-"+datetime.now().strftime("%d-%m-%Y-%H:%M:%S")
+
+
+def getResultantFilename(s=getDeafultFilename(), ext="docx"):
     temp = s[:]
     num = 1
     while(os.path.isfile(os.getcwd()+"/../OUTPUT/"+temp+"."+ext)):
@@ -24,7 +28,7 @@ def getResultantFilename(s="New File", ext="docx"):
         num += 1
     if(ext):
         return temp+"."+ext
-    return temp
+    return temp.replace(" ", "-")
 
 
 def setOrientation(document):
@@ -72,8 +76,10 @@ def main():
         print(chr(i+97), ":", j.split("\\")[1])
         ImgDict[chr(i+97)] = j
     ip = input("Enter required order [#:default]: ").lower().strip().split()
+    filename = input("Enter name of file(without extension):")
+    filename = getResultantFilename(filename, "docx")
     if(ip[0] == "#"):
-        newImgArray = ImgArray[:]
+        newImgArray = ImgArray
     else:
         for i in ip:
             try:
@@ -81,14 +87,20 @@ def main():
             except Exception:
                 print("Invalid values!!")
                 exit()
-    filename = input("Enter name of file(without extension):")
-    filename = getResultantFilename(filename, "docx")
     imageToPDFs(newImgArray, filename)
     print("DONE!")
-    time.sleep(1)
+    sleep(1)
     print("Goodbye!")
-    time.sleep(1)
+    sleep(1)
 
 
 if __name__ == "__main__":
+    try:
+        os.mkdir(os.getcwd()+"/../OUTPUT")
+    except FileExistsError as e:
+        pass
+    try:
+        os.mkdir(os.getcwd()+"/../DROP")
+    except FileExistsError as e:
+        pass
     main()

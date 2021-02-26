@@ -1,6 +1,6 @@
 # Image to PDF File
 
-# Adds the input images to a .docx file with the image dimentions same as the page dimentions
+## Adds the input images to a .docx file with the image dimentions same as the page dimentions
 
 ## Instructions
 
